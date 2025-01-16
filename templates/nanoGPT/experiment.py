@@ -595,6 +595,10 @@ def train(dataset="shakespeare_char", out_dir="run_0", seed_offset=0):
         if iter_num > max_iters:
             break
 
+        # Print training step progress
+        if iter_num % 100 == 0:
+            print(f"Training step {iter_num}/{max_iters}")
+
     print("training done")
     print(f"Best validation loss: {best_val_loss}")
     print(f"Total train time: {(time.time() - og_t0) / 60:.2f} mins")

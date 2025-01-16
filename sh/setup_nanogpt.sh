@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --partition=use-everything      # Target the partition with newer GPUs
 #SBATCH --gres=gpu:1                    # Request 1 GPU, model to be selected dynamically
-#SBATCH --time=2:00:00                  # Set a time limit for the job
+#SBATCH --time=40:00:00                  # Set a time limit for the job
 #SBATCH --mem=16G                       # Set memory limit (e.g., 16 GB)
 #SBATCH --cpus-per-task=4               # Allocate 4 CPU cores
 #SBATCH --job-name=SetupNanoGPT         # Set a name for the job

@@ -43,8 +43,9 @@ def run_experiment(folder_name, run_num, timeout=7200):
     ]
     try:
         result = subprocess.run(
-            command, cwd=cwd, stderr=subprocess.PIPE, text=True, timeout=timeout
+            command, cwd=cwd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, text=True, timeout=timeout
         )
+        print(result.stdout)  # show stdout for more progress info
 
         if result.stderr:
             print(result.stderr, file=sys.stderr)
