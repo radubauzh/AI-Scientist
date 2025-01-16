@@ -4,9 +4,9 @@
 #SBATCH --time=40:00:00                  # Set a time limit for the job
 #SBATCH --mem=16G                       # Set memory limit (e.g., 16 GB)
 #SBATCH --cpus-per-task=4               # Allocate 4 CPU cores
-#SBATCH --job-name=SetupNanoGPT         # Set a name for the job
-#SBATCH --output=/om2/user/raduba/AI-Scientist/logs/setup_nanogpt_%j.log  # Save stdout
-#SBATCH --error=/om2/user/raduba/AI-Scientist/logs/setup_nanogpt_%j.log   # Save stderr
+#SBATCH --job-name=MainNano         # Set a name for the job
+#SBATCH --output=/om2/user/raduba/AI-Scientist/logs/main_nanoGPT_%j.log  # Save stdout
+#SBATCH --error=/om2/user/raduba/AI-Scientist/logs/main_nanoGPT_error_%j.log   # Save stderr
 
 # Load necessary modules and activate Conda environment
 source /om2/user/raduba/anaconda/etc/profile.d/conda.sh
