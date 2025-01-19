@@ -4,9 +4,9 @@
 #SBATCH --time=30:00:00                 # Set a time limit for the job
 #SBATCH --mem=16G                       # Set memory limit (e.g., 16 GB)
 #SBATCH --cpus-per-task=4               # Allocate 4 CPU cores
-#SBATCH --job-name=MainNano             # Set a name for the job
-#SBATCH --output=/om2/user/raduba/AI-Scientist/logs/main_nanoGPT_%j.log  # Save stdout
-#SBATCH --error=/om2/user/raduba/AI-Scientist/logs/main_nanoGPT_error_%j.log   # Save stderr
+#SBATCH --job-name=MainGrokking         # Set a name for the job
+#SBATCH --output=/om2/user/raduba/AI-Scientist/logs/main_grokking_%j.log  # Save stdout
+#SBATCH --error=/om2/user/raduba/AI-Scientist/logs/main_grokking_error_%j.log   # Save stderr
 
 # Load necessary modules and activate Conda environment
 source /om2/user/raduba/anaconda/etc/profile.d/conda.sh
@@ -70,31 +70,23 @@ done
 # Navigate to the project directory
 cd /om2/user/raduba/AI-Scientist || { echo "Failed to navigate to /om2/user/raduba/AI-Scientist"; exit 1; }
 
-# Step 1: Prepare the data
-echo "Preparing data..."
-python data/enwik8/prepare.py || { echo "Failed to prepare enwik8 data"; exit 1; }
-python data/shakespeare_char/prepare.py || { echo "Failed to prepare shakespeare_char data"; exit 1; }
-python data/text8/prepare.py || { echo "Failed to prepare text8 data"; exit 1; }
+# Step 2: Set up baseline run for Grokking
+echo "Running baseline experiment for Grokking..."
+cd templates/grokking || { echo "Failed to navigate to templates/grokking"; exit 1; }
+python experiment.py --out_dir run_0 || { echo "Failed to run baseline experiment for Grokking"; exit 1; }
 
-# Step 2: Set up baseline run for NanoGPT
-echo "Running baseline experiment..."
-cd templates/nanoGPT || { echo "Failed to navigate to templates/nanoGPT"; exit 1; }
-python experiment.py --out_dir run_0 || { echo "Failed to run baseline experiment"; exit 1; }
-
-# Step 3: Generate baseline plots
-echo "Generating plots..."
-python plot.py || { echo "Failed to generate plots"; exit 1; }
-
-echo "NanoGPT setup completed successfully."
-
+# Step 3: Generate baseline plots for Grokking
+echo "Generating plots for Grokking..."
+python plot.py || { echo "Failed to generate plots for Grokking"; exit 1; }
 
 cd /om2/user/raduba/AI-Scientist
-echo "Launching Scientist"
-# Step 5: Run the NanoGPT template experiment
+
+# Step 4: Launch Scientist with Grokking template
+echo "Launching Scientist with Grokking template..."
 python launch_scientist.py \
-    --model "gpt-4o-2024-08-06" \
-    --experiment nanoGPT \
+    --model "claude-3-5-sonnet-20241022" \
+    --experiment grokking \
     --num-ideas 1 \
     --engine openalex
 
-echo "NanoGPT experiment completed successfully."
+echo "Grokking experiment completed successfully."

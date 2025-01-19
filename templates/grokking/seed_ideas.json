@@ -1,10 +1,10 @@
 [
   {
-    "Name": "batch_size_grokking",
-    "Title": "Batch Size Grokking: Assessing the impact of the training batchsize on the grokking phenomenon",
-    "Experiment": "Modify the experiments to dynamically adjust the batch size during training, starting with a small batch size and gradually increasing it. This could potentially lead to faster generalization on the validation set.",
-    "Interestingness": 6,
-    "Feasibility": 4,
-    "Novelty": 4
+    "Name": "dynamic_sparsity_grokking",
+    "Title": "Dynamic Sparsity and Grokking: The Interplay Between Sparse Masks and Generalization",
+    "Experiment": "Combine sparse training techniques (e.g., dynamic sparse reparameterization or lottery ticket hypotheses) with settings that exhibit grokking. Test whether dynamically adjusting sparsity throughout training accelerates the grokking transition or alters the optimization trajectories. Measure whether sparsity evolution correlates with the model's ability to generalize and identify any patterns that emerge during the grokking phase.",
+    "Interestingness": 8,
+    "Feasibility": 5,
+    "Novelty": 7
   }
 ]
