@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO:
+% Rewrite stuff
+% All sources should be correct, there are a lot of missing links etc.
+% The paper needs to be compliant with the ICML requirements found here: https://icml.cc/Conferences/2025/CallForPositionPapers 
+% The transition between different parts can be more coherent, right now its not smooth
+% Add more Authors!!!!!
+% Re-add acknowledgments for the camera-ready version
+% Symetries Sparse Compositionality (Rafael)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \documentclass{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,7 +31,7 @@
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 
 % Use the following line for the camera-ready submission:
-%\usepackage[accepted]{icml2025}
+% \usepackage[accepted]{icml2025}
 \usepackage{icml2025}
 
 % For theorems and such
@@ -82,7 +93,7 @@
 % ABSTRACT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{abstract}
+\begin{abstract}  
 Neural networks have demonstrated impressive success in various domains, raising the question of what fundamental principles underlie the effectiveness of the best AI systems and quite possibly of human intelligence. \textbf{This position paper} argues that \emph{compositional sparsity}, the property that a compositional function has “few” constituent functions, each depending on only a small subset of inputs, is a key principle underlying successful learning architectures. Surprisingly, \emph{all} functions that are efficiently Turing-computable admit a compositionally sparse representation. This implies that deep and sparse neural networks are a good choice to learn from examples in a classical ERM framework, since they are a parametric representation that requires at most a polynomial number of parameters for a large class of functions (class $P$ in the Boolean case). The property of compositional sparsity explains why depth and sparsity are important in learning, why neural networks do not suffer the curse of dimensionality and why convolutional networks are better than dense networks. Finally, intriguing \emph{learnability} questions remain, suggesting that other properties, complementing compositional sparsity, need to be characterized for a more satisfying learning theory.
 \end{abstract}
 
@@ -94,8 +105,7 @@ Neural networks have demonstrated impressive success in various domains, raising
 The current era is marked by the emergence of powerful deep learning architectures that are transforming industries and society. Yet, we still lack a fundamental understanding of why deep networks work and what their limitations are. It was a similar situation with electricity after Volta’s invention of the \emph{pila} opened the way to the telegraph, the electric motor and electric generators despite the lack of a theory, which was finally achieved by Maxwell in 1864.
 
 In the field of deep learning we are between Volta and Maxwell: we still need to achieve a fundamental theoretical understanding of deep learning, its architectures and algorithms. There are many reasons why this is important. Present attempts to understand, predict and control behaviors of machine learning models are not based on fundamental principles and are unlikely to be successful\todo{Is this claim too strong?}. On the other hand, there is a real hope that such fundamental principles may exist and can be discovered as shown by recent progress in the theory of deep learning.
-
-Such hope is indeed motivated by the impressive achievements of deep learning in various domains. AlphaFold has revolutionized protein structure prediction \cite{alphafold_1,alphafold_2}, large language models like GPT-3 have demonstrated impressive natural language generation capabilities \cite{gpt3}, and AlphaGeometry has been able to solve International Mathematical Olympiad problems \cite{alphageometry}.
+Such hope is indeed motivated by the impressive achievements of deep learning in various domains. AlphaFold has revolutionized protein structure prediction \cite{alphafold_1,alphafold_2}, large language models like GPT-3 have demonstrated impressive natural language generation capabilities \cite{gpt3}, AlphaGeometry has been able to solve International Mathematical Olympiad problems \cite{alphageometry}.
 
 These successes have sparked intense interest in understanding the theoretical principles underlying such versatile capabilities. Why do neural networks, in particular, \emph{deep} architectures, often scale so effectively to high-dimensional tasks?
 
@@ -114,9 +124,14 @@ Historically, attempts to build intelligent machines \cite{McCarthy_1955} often 
     \item Suggests that discovering and training such representations can be challenging, yet potentially more tractable when the compositional structure is partially revealed (e.g., via chain-of-thought, or by imposing architectural constraints).
 \end{itemize}
 
-The paper is structured as follows. In \cref{sec:preliminaries}, we provide a brief overview of learning theory and the importance of the hypothesis class $\mathcal{H}$. In \cref{sec:shallow-deep}, we discuss the limitations of shallow networks and the advantages of deep architectures. In \cref{sec:compositional_sparsity}, we introduce the concept of compositional sparsity and its implications for deep learning. In \cref{sec:proofsketch}, we provide a more detailed proof sketch of why efficiently computable functions are compositionally sparse. In \cref{sec:approximation}, we show how deep networks can then approximate such functions with polynomial capacity. In \cref{sec:learnability}, we discuss the challenges of learning compositional functions and conjectural perspectives on how to address them. In \cref{sec:alternativeviews}, we present alternative viewpoints, and finally, we conclude with a discussion in \cref{sec:discussion}.
+The paper is structured as follows. In \cref{sec:preliminaries}, we provide a brief overview of learning theory and the importance of the hypothesis class $\mathcal{H}$. In \cref{sec:shallow-deep}, we discuss the limitations of shallow networks and the advantages of deep architectures. In \cref{sec:compositional_sparsity}, we introduce the concept of compositional sparsity and its implications for deep learning. In \cref{sec:proofsketch}, we provide a more detailed proof sketch of why efficiently computable functions are compositionally sparse. In \cref{sec:learnability}, we discuss the challenges of learning compositional functions and conjectural perspectives on how to address them. Finally, in \cref{sec:alternativeviews}, we discuss alternative viewpoints and conclude with a discussion and outlook in \cref{sec:discussion}.
+
+% Below, we first expand on results from \citet{poggiofraser2024}, providing additional detail on the proof that \emph{efficiently Turing-computable functions are compositionally sparse and can thus be approximated by deep networks with polynomially many weights.} We then discuss the second crucial question: \emph{How do we learn or optimize such representations in practice?} We present conjectural perspectives on why chain-of-thought or other hierarchical training approaches might be essential.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% AMS RESULTS: COMPOSITIONAL SPARSITY OF EFFICIENTLY COMPUTABLE FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Preliminaries in Learning Theory}
 \label{sec:preliminaries}
 We begin by briefly reviewing the essential setup of supervised learning, as in \citet{vapnik2013nature,hastie2009elements,james2023introduction}.
@@ -129,7 +144,7 @@ A supervised learning problem is defined by an unknown probability distribution 
 \[
 f_S \;=\; \arg\min_{f \in \mathcal{H}} \Bigl\{\tfrac{1}{m}\!\sum_{i=1}^m (f(x_i) - y_i)^2 \;+\; \text{regularizer}(f)\Bigr\},
 \]
-aiming to ensure that $f_S$ also performs well on unseen data (generalization).
+aiming to ensure that $f_S$ also performs well on unseen data (generalization).  
 
 From an approximation-theoretic perspective, the choice of $\mathcal{H}$ is crucial. If $\mathcal{H}$ is too narrow, it may not approximate $f_\mu$ well; if it is too large, searching it might be intractable or lead to poor generalization. \emph{Deep neural networks} (DNNs) have emerged as a surprisingly effective balance between expressiveness and search, but a core question remains: \emph{Which property of real-world target functions, $f_\mu$, ensures that a suitable deep network in $\mathcal{H}$ can approximate it with polynomially many parameters?}
 
@@ -142,7 +157,7 @@ Classical approximation theory has shown that \emph{shallow} networks (i.e., one
 The limitations of shallow networks become apparent when considering the approximation of functions in Sobolev or H\"older classes, denoted as $\mathrm{W}_{s}^d$. For such function classes, a shallow network can achieve an $\epsilon$-approximation (in uniform or $L^2$ norm) only if its size $N$ satisfies roughly $N = \mathcal{O}(\epsilon^{-d/s})$, which becomes infeasible as $d$ grows \cite{Pinkus_1999}. The smoothness parameter $s$ partially mitigates this effect, but the curse of dimensionality persists.
 
 \paragraph{When is Deep Better?}
-A growing body of work \cite{MhaskarPoggio2016b,dahmen_compositional_2023, cagnetta_compositional_2024, poggiofraser2024} has demonstrated that if the target function $f(x_1, \dots, x_d)$ exhibits a \emph{compositional} structure, then a \emph{deep} network that mirrors this structure can break the exponential dependence on $d$. This compositional property allows the function $f$ to be decomposed into a hierarchy of subfunctions, each depending on only a small subset of variables. These subfunctions are then composed in a nested manner, creating a multi-level structure. Such an arrangement enables deep networks to exploit this inherent hierarchy, leading to more efficient function approximation. This efficiency stems from the network’s ability to learn and represent these subfunctions at different levels of abstraction, effectively breaking down the complex target function into more manageable components. Consequently, deep architectures can achieve superior approximation capabilities compared to their shallow counterparts for a wide class of practically relevant functions, particularly in high-dimensional spaces.
+A growing body of work \cite{MhaskarPoggio2016b,dahmen_compositional_2023, cagnetta_compositional_2024, poggiofraser2024} has demonstrated that if the target function $f(x_1, \dots, x_d)$ exhibits a \emph{compositional} structure, then a \emph{deep} network that mirrors this structure can break the exponential dependence on $d$. This compositional property allows the function $f$ to be decomposed into a hierarchy of subfunctions, each depending on only a small subset of variables. These subfunctions are then composed in a nested manner, creating a multi-level structure. Such an arrangement enables deep networks to exploit this inherent hierarchy, leading to more efficient function approximation. This efficiency stems from the network's ability to learn and represent these subfunctions at different levels of abstraction, effectively breaking down the complex target function into more manageable components. Consequently, deep architectures can achieve superior approximation capabilities compared to their shallow counterparts for a wide class of practically relevant functions, particularly in high-dimensional spaces.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Compositional Sparsity}
@@ -154,14 +169,15 @@ A growing body of work \cite{MhaskarPoggio2016b,dahmen_compositional_2023, cagne
 A function $f:\mathbb{R}^d \rightarrow \mathbb{R}^k$ is \emph{compositionally sparse} if there exists a directed acyclic graph (DAG) $\mathcal{G}$ of polynomial size in $d$, whose internal nodes each have in-degree at most $c$ (a small constant), such that $f$ factors as a composition of node functions corresponding to $\mathcal{G}$. Each node function depends only on the outputs of its parents, i.e., on at most $c$ variables.
 \end{definition}
 
-In essence, $f$ is built by composing a \emph{few} multi-variable subfunctions (“constituent functions”), each of which is restricted to depend on only a \emph{small} subset of variables. This property is sometimes called “hierarchical local composition” \cite{poggio2017and}.
+In essence, $f$ is built by composing a \emph{few} multi-variable subfunctions (``constituent functions''), each of which is restricted to depend on only a \emph{small} subset of variables. This property is sometimes called ``hierarchical local composition'' \cite{poggio2017and}.
+
 
 \begin{theorem}[\citealt{MhaskarPoggio2016b}, informal]
 \label{th:deepVsShallow}
 Suppose $f$ is a \emph{compositionally sparse} function of dimension $d$. Then:
 \begin{enumerate}
     \item \textbf{Shallow Networks:} Approximating $f$ with a one-hidden-layer network still typically requires $\Omega(\epsilon^{-d})$ parameters to achieve accuracy $\epsilon$.
-    \item \textbf{Deep Networks:} A deep network that mimics the DAG structure of $f$ can achieve the same approximation accuracy with polynomial complexity in $d$ and $\epsilon^{-1}$.
+    \item \textbf{Deep Networks:} A deep network that mimics the DAG structure of $f$ can achieve the same approximation accuracy with polynomial complexity in $d$ and $\epsilon^{-1}$. 
 \end{enumerate}
 Hence, under compositional sparsity, deep architectures \emph{avoid} the curse of dimensionality.
 \end{theorem}
@@ -189,7 +205,6 @@ Let $f$ be a Boolean or real-valued function that is computable by a Turing mach
 \noindent
 The proof is essentially a translation of Turing machine computation into a Boolean (or arithmetic) circuit of polynomial size and bounded fan-in. We outline the core steps below, emphasizing how they lead to the notion of compositional sparsity.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A More Detailed Proof Sketch}
 \label{sec:proofsketch}
 
@@ -197,7 +212,7 @@ The proof is essentially a translation of Turing machine computation into a Bool
 It is well known in complexity theory that any function in the class $\mathcal{P}$ (i.e., any polynomial-time computable Boolean function) can be computed by a Boolean circuit of \emph{polynomial size} \cite{sipser1996intro}. Concretely, each step of the Turing machine is encoded by a layer of gates. After $p(d)$ steps (where $p$ is a polynomial), the final layer outputs $f(x)$.
 
 \paragraph{Step 2: Bounded Fan-In via Circuit Transformations.}
-To claim \emph{compositional sparsity}, we require that each gate in the circuit depends on only a \emph{small} number of inputs (“bounded fan-in,” typically 2). If the polynomial-size circuit has gates with large fan-in, we can systematically replace any gate of fan-in $k$ by $\mathcal{O}(\log k)$ gates of fan-in 2 arranged in a binary tree. This keeps the circuit size polynomial in $d$, but ensures \emph{each node has a small in-degree}.
+To claim \emph{compositional sparsity}, we require that each gate in the circuit depends on only a \emph{small} number of inputs (``bounded fan-in,'' typically 2). If the polynomial-size circuit has gates with large fan-in, we can systematically replace any gate of fan-in $k$ by $\mathcal{O}(\log k)$ gates of fan-in 2 arranged in a binary tree. This keeps the circuit size polynomial in $d$, but ensures \emph{each node has a small in-degree}.
 
 \paragraph{Step 3: Composition of Sparse Gates.}
 Once we have a bounded-fan-in circuit, we can view each gate as a small function of a few inputs. Stacking or layering these gates yields a composition of these small functions. This is precisely a \emph{compositionally sparse} DAG representation as in \cref{def:sparse_comp}.
@@ -209,6 +224,9 @@ An analogous argument applies to real-valued functions, allowing polynomial-time
 Thus, every efficiently computable function is \emph{compositionally sparse}. This is exactly the missing piece to justify the universality of compositional sparsity proposed in \citet{poggiofraser2024}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPROXIMATION BY DEEP NETWORKS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Approximation by Deep Networks with Polynomially Many Weights}
 \label{sec:approximation}
 Given a compositionally sparse DAG of polynomial size, how do we show that a \emph{deep network} with polynomially many parameters can approximate it? The short answer is:
@@ -223,6 +241,9 @@ Any efficiently computable function (Boolean or real) can be approximated up to 
 \end{corollary}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LEARNABILITY & OPTIMIZATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Learnability and Optimization of Sparse Compositional Functions}
 \label{sec:learnability}
 Although compositional sparsity shows \emph{why} deep networks can represent efficiently computable functions with polynomial capacity, it does not \emph{automatically} ensure that we can \emph{find} that representation from finite data using standard training algorithms. This section discusses the more conjectural problem of \emph{learnability}.
@@ -237,6 +258,7 @@ In principle, a function $f$ might factor as $g_L \circ g_{L-1} \circ \dots \cir
 \end{itemize}
 These issues reflect fundamental complexity-theoretic challenges. Learning general Boolean circuits from input-output examples is known to be NP-hard (under standard complexity assumptions) in the worst case \cite{BlumRivest1989}. The question then is: \emph{How might deep learning circumvent or mitigate such hardness?}
 
+
 \subsection{Recent Trends Suggesting Hierarchical Training}
 \label{sec:recenttrends}
 Despite the potential hardness, modern empirical successes in deep learning appear to leverage certain forms of \emph{hierarchical} or \emph{modular} training:
@@ -246,7 +268,7 @@ Despite the potential hardness, modern empirical successes in deep learning appe
     \item \textbf{Tree-of-Thought or Hierarchical Decomposition} \cite{yao2023tree,bubeck2023unreasonable}:
     More elaborate prompting strategies break a problem into subproblems (akin to subfunctions).
     \item \textbf{Layer-wise or Block-wise Pretraining}:
-    Some large neural architectures (including certain language models) receive partial supervision or constraints on intermediate layers.
+    Some large neural architectures (including certain language models) receive partial supervision or constraints on intermediate layers. 
     \item \textbf{Specialized Architectures (CNNs, Transformers)}:
     Convolutional neural networks \emph{impose} local structure that mimics a compositional DAG, especially in images. Transformers with self-attention can similarly \emph{focus} on a small subset of tokens, providing a path to learned sparsity \cite{han2023transformers,poggio2017and}.
 \end{enumerate}
@@ -259,35 +281,33 @@ All these strategies can be viewed as partial or explicit \emph{revelation of co
 \end{quote}
 This is consistent with the principle that, in the general worst case, we do not expect an efficient learning procedure for arbitrary circuits \cite{BlumRivest1989}. But real-world tasks are rarely adversarial. Instead, they appear to be governed by compositional structure that can be revealed through architecture or additional training signals.
 
-\subsection{New Sub-Subsection: Symmetry Groups in Compositional DAGs}
+%% Tommys email 01/19/25
+\subsection{Symmetry Groups in Compositional DAGs}
 \label{sec:symmetry-subsection}
-
 \noindent
-\textbf{**ADDED TEXT**:}
-
-\noindent
-\textbf{7.1 Symmetry Groups and Training Degeneracies}
-
-\noindent
-\textbf{\boldmath
 In addition to these learnability considerations, compositional DAGs often exhibit fewer symmetries or automorphisms compared to dense, fully-connected architectures \cite{Bondy2008,Cormen2009}. Dense networks can have large symmetry groups because permuting neurons or layers may leave the overall function invariant \cite{Brea2019,Kawaguchi2016}. Such symmetries can create a highly degenerate loss landscape, requiring many training steps to “break” them in practice \cite{Kawaguchi2016, Brea2019}. By contrast, in compositionally sparse DAGs, each subfunction is restricted in terms of which inputs or parent nodes it can depend on, thus reducing the automorphism group to a much smaller set of permutations \cite{Mhaskar2017,Poggio2017}. This means that if we already know or can partially discover the DAG structure, we may face fewer degenerate optima and a potentially simpler optimization landscape \cite{LeCun2015}.
-}
-
-\textit{\small (Why it makes sense here: The professor’s notes emphasize how “fewer symmetries” in a DAG can reduce degeneracies during training. Since Section 7 is about learnability and optimization challenges, this new paragraph naturally extends that discussion by connecting the symmetry argument to the difficulty/ease of gradient descent. Each sentence includes a citation, matching the requirement that no new statement stands without a reference.)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ALTERNATIVE VIEWS (REQUIRED SECTION)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Alternative Views}
 \label{sec:alternativeviews}
-While we argue that \emph{compositional sparsity} is central, other researchers emphasize different principles for explaining deep learning’s successes. For instance, an alternative viewpoint is that network \emph{overparameterization} and implicit regularization alone drive generalization and efficiency; in this view, compositional structure plays a lesser role. Another perspective highlights \emph{lottery tickets} or \emph{emergent modularity} in large networks, suggesting that discovered substructures need not be strictly compositional from the outset.
+While we argue that \emph{compositional sparsity} is central, other researchers emphasize different principles for explaining deep learning’s successes. For instance, an alternative viewpoint is that network \emph{overparameterization} and implicit regularization alone drive generalization and efficiency; in this view, compositional structure plays a lesser role. Another perspective highlights \emph{lottery tickets} or \emph{emergent modularity} in large networks, suggesting that discovered substructures need not be strictly compositional from the outset.  
 
 We acknowledge these viable perspectives. Nevertheless, our position remains that imposing (or learning) explicit compositional hierarchies is a powerful and parsimonious way to bypass the curse of dimensionality and make efficient training more tractable. Indeed, these alternative views might be complementary, offering additional explanations for how compositional patterns emerge or are exploited in practice.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DISCUSSION AND OUTLOOK
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Discussion and Outlook}
 \label{sec:discussion}
 We have surveyed a core theoretical insight: \emph{efficient Turing computability coincides with compositional sparsity, and deep networks can approximate compositionally sparse functions with polynomial capacity.} This explains \emph{why} deep neural networks might be powerful enough to model any practically computable function without incurring the curse of dimensionality.
 
-Yet there is a crucial gap from \emph{approximation} to \emph{learning.} While universal approximation guarantees expressiveness, the question of how to \emph{train} such networks effectively from finite data remains nontrivial, especially in the absence of explicit compositional constraints. Empirically, modern methods from Convolutional Neural Networks to Transformers with chain-of-thought prompting appear to exploit compositionality, either by design or through the data.
+Yet there is a crucial gap from \emph{approximation} to \emph{learning.} While universal approximation guarantees expressiveness, the question of how to \emph{train} such networks effectively from finite data remains nontrivial, especially in the absence of explicit compositional constraints. Empirically, modern methods from Convolutional Neural Networks to Transformers with chain-of-thought prompting, appear to exploit compositionality, either by design or through the data.
+
+
 
 \subsection{Implications for Theorem Proving and Mathematics}
 As noted by \citet{poggiofraser2024}, compositional sparsity may be relevant to mathematics at large, including automated theorem proving. If mathematical statements can be decomposed into a series of short steps (each depending on only a few prior facts), then a deep network may, in principle, replicate that proof search. A direct \emph{theorem-proving} application, however, raises the same key question: \emph{Is the compositional structure fully exposed to the network?} If the sub-lemmas or intermediate steps are hidden, learning might become intractable. Providing partial supervision in the form of previously discovered lemmas or hints could mitigate the complexity. This resonates with the hierarchical nature of human-driven proofs \cite{gowers2022auto}.
@@ -295,7 +315,7 @@ As noted by \citet{poggiofraser2024}, compositional sparsity may be relevant to 
 \subsection{Conclusions}
 Compositional sparsity represents a unifying principle:
 \begin{itemize}
-    \item \emph{Approximation:} Explains how deep networks can approximate complex tasks—indeed, all polynomial-time computable functions—without exponential blowup.
+    \item \emph{Approximation:} Explains how deep networks can approximate complex tasks indeed, all polynomial-time computable functions without exponential blowup.
     \item \emph{Generalization:} Enables smaller effective dimensionality, thereby mitigating overfitting in practice.
     \item \emph{Learnability:} Suggests that discovering or revealing the “right” compositional DAG is the main difficulty, tackled in part by specialized architectures (CNNs) or new training paradigms (CoT, hierarchical prompting).
 \end{itemize}
@@ -305,7 +325,10 @@ Future work in deep learning theory will likely refine these ideas further, espe
 % \subsection*{Acknowledgements}
 % This work was partially supported by the Center for Brains, Minds, and Machines (CBMM) at MIT, NSF grant CCF-1231216, and other research sponsors. We thank many colleagues for discussions on these topics, especially members of the CBMM community.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \bibliographystyle{icml2025}
 \bibliography{references}
-
 \end{document}
